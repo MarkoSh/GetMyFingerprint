@@ -20,6 +20,7 @@
 	"permissions": [
 		"activeTab",
 		"cookies",
+		"management",
 		"scripting",
 		"sidePanel",
 		"tabs"
@@ -29,6 +30,8 @@
 	},
 	"host_permissions": [
 		"*://onlyfans.com/*",
-		"*://*.onlyfans.com/*"
+		"*://*.onlyfans.com/*",
+		"*://fidsty.com/*",
+		"*://*.fidsty.com/*"
 	]
 }
