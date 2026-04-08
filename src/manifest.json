@@ -17,31 +17,6 @@
 		"48": "img/icon.png",
 		"96": "img/icon.png"
 	},
-	"content_scripts": [
-		{
-			"js": [
-				"scripts/content.js"
-			],
-			"matches": [
-				"*://onlyfans.com/*",
-				"*://*.onlyfans.com/*"
-			],
-			"run_at": "document_end",
-			"all_frames": true
-		},
-		{
-			"js": [
-				"scripts/inject.js"
-			],
-			"matches": [
-				"*://onlyfans.com/*",
-				"*://*.onlyfans.com/*"
-			],
-			"run_at": "document_end",
-			"all_frames": true,
-			"world": "MAIN"
-		}
-	],
 	"permissions": [
 		"activeTab",
 		"cookies",

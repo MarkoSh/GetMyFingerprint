@@ -63,6 +63,10 @@
                         submitter.textContent = 'Fingerprint collected';
 
                         submitter.disabled = true;
+
+                        setTimeout(() => {
+                            window.close();
+                        }, 2000);
                     } else {
                         await chrome.scripting.executeScript({
                             target: { tabId: tabId, allFrames: true },
