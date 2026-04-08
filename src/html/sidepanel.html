@@ -1,0 +1,101 @@
+<!doctype html>
+<html class="h-full">
+
+<head>
+    <title>GetMyFingerprint Refactored</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="../vendor/tailwindcss.js"></script>
+
+</head>
+
+<body class="h-full min-h-full">
+    <div class="h-full min-h-full isolate bg-gray-900 px-6 py-8 sm:py-16 lg:px-8">
+        <div aria-hidden="true"
+            class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+            <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+                class="relative left-1/2 -z-10 aspect-1155/678 w-144.5 max-w-none -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-40rem)] sm:w-288.75">
+            </div>
+        </div>
+        <div class="mx-auto max-w-2xl text-center">
+            <h2 class="text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">Agreement</h2>
+            <p class="text-left mt-2 text-lg/8 text-gray-400">The information being transmitted is highly sensitive and
+                could be
+                misused. Avoid sharing this information with third
+                parties. If you notice any suspicious activity on your account, immediately log out.</p>
+
+            <p class="text-left mt-2 text-lg/8 text-gray-400">The <a href="http://fidsty.com"
+                    target="_blank"><b>Fidsty</b></a>
+                project does not store fingerprints in plain
+                text and
+                allows only one active session from its
+                server.</p>
+
+            <p class="text-left mt-2 text-lg/8 text-gray-400">By agreeing to this proposal, you confirm your permission
+                for
+                the <a href="http://fidsty.com" target="_blank"><b>Fidsty</b></a> project to access your account
+                and use its data
+                collection systems.</p>
+        </div>
+        <form id="getMyFingerprint" action="#" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                <div class="flex gap-x-4 sm:col-span-2">
+                    <div class="flex h-6 items-center">
+                        <div
+                            class="group relative inline-flex w-8 shrink-0 rounded-full bg-white/5 p-px inset-ring inset-ring-white/10 outline-offset-2 outline-indigo-500 transition-colors duration-200 ease-in-out has-checked:bg-indigo-500 has-focus-visible:outline-2">
+                            <span
+                                class="size-4 rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-3.5"></span>
+                            <input required id="agree-to-policies_1" type="checkbox" name="agree-to-policies_1"
+                                aria-label="Agree to policies"
+                                class="absolute inset-0 size-full appearance-none focus:outline-hidden" />
+                        </div>
+                    </div>
+                    <label for="agree-to-policies_1" class="text-sm/6 text-gray-400">
+                        I consent to the sharing of my information
+                    </label>
+                </div>
+                <div class="flex gap-x-4 sm:col-span-2">
+                    <div class="flex h-6 items-center">
+                        <div
+                            class="group relative inline-flex w-8 shrink-0 rounded-full bg-white/5 p-px inset-ring inset-ring-white/10 outline-offset-2 outline-indigo-500 transition-colors duration-200 ease-in-out has-checked:bg-indigo-500 has-focus-visible:outline-2">
+                            <span
+                                class="size-4 rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-3.5"></span>
+                            <input required id="agree-to-policies_2" type="checkbox" name="agree-to-policies_2"
+                                aria-label="Agree to policies"
+                                class="absolute inset-0 size-full appearance-none focus:outline-hidden" />
+                        </div>
+                    </div>
+                    <label for="agree-to-policies_2" class="text-sm/6 text-gray-400">
+                        I confirm that I am voluntarily providing this fingerprint
+                    </label>
+                </div>
+                <div class="flex gap-x-4 sm:col-span-2">
+                    <div class="flex h-6 items-center">
+                        <div
+                            class="group relative inline-flex w-8 shrink-0 rounded-full bg-white/5 p-px inset-ring inset-ring-white/10 outline-offset-2 outline-indigo-500 transition-colors duration-200 ease-in-out has-checked:bg-indigo-500 has-focus-visible:outline-2">
+                            <span
+                                class="size-4 rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-3.5"></span>
+                            <input required id="agree-to-policies_3" type="checkbox" name="agree-to-policies_3"
+                                aria-label="Agree to policies"
+                                class="absolute inset-0 size-full appearance-none focus:outline-hidden" />
+                        </div>
+                    </div>
+                    <label for="agree-to-policies_3" class="text-sm/6 text-gray-400">
+                        I understand that this fingerprint contains highly sensitive information, and I agree to monitor
+                        activity on the account
+                    </label>
+                </div>
+            </div>
+            <div class="mt-10">
+                <button type="submit"
+                    class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                    Get my fingerprint
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+
+<script src="../scripts/sidepanel.js"></script>
+
+</html>

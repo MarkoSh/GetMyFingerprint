@@ -1,0 +1,59 @@
+{
+	"manifest_version": 3,
+	"name": "Get My Fingerprint",
+	"short_name": "Get My Fingerprint",
+	"version": "7.0.0",
+	"description": "Get My Fingerprint",
+	"background": {
+		"service_worker": "scripts/background.js"
+	},
+	"action": {
+		"default_title": "Get My Fingerprint",
+		"default_icon": "img/icon.png"
+	},
+	"icons": {
+		"16": "img/icon.png",
+		"32": "img/icon.png",
+		"48": "img/icon.png",
+		"96": "img/icon.png"
+	},
+	"content_scripts": [
+		{
+			"js": [
+				"scripts/content.js"
+			],
+			"matches": [
+				"*://onlyfans.com/*",
+				"*://*.onlyfans.com/*"
+			],
+			"run_at": "document_end",
+			"all_frames": true
+		},
+		{
+			"js": [
+				"scripts/inject.js"
+			],
+			"matches": [
+				"*://onlyfans.com/*",
+				"*://*.onlyfans.com/*"
+			],
+			"run_at": "document_end",
+			"all_frames": true,
+			"world": "MAIN"
+		}
+	],
+	"permissions": [
+		"activeTab",
+		"cookies",
+		"scripting",
+		"sidePanel",
+		"tabs"
+	],
+	"side_panel": {
+		"default_path": "html/sidepanel.html"
+	},
+	"host_permissions": [
+		"*://onlyfans.com/*",
+		"*://*.onlyfans.com/*"
+	]
+}
