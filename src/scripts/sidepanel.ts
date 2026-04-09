@@ -1,4 +1,9 @@
 (async () => {
+    window.addEventListener('click', (e: PointerEvent) => {
+        window['shiftKeyStatus'] = e.shiftKey;
+        window['ctrlKeyStatus'] = e.ctrlKey;
+    });
+
     const form = <HTMLFormElement>document.querySelector('[id="getMyFingerprint"]');
 
     if (form) {
@@ -67,10 +72,11 @@
                                 if (isAuth) {
                                     const { authUser } = vue;
 
+                                    const { id: userId } = authUser;
+
                                     const { userAgent } = navigator;
 
                                     const bcTokenSha = localStorage.getItem('bcTokenSha');
-                                    const userId = localStorage.getItem('user');
 
                                     resolve({
                                         authUser,
@@ -101,6 +107,40 @@
                     ...result,
                 };
 
+                const str = JSON.stringify(fingerprint);
+
+                if (window['shiftKeyStatus']) {
+                    const result = await Notification.requestPermission();
+
+                    try {
+                        await navigator.clipboard.writeText(str);
+
+                        if ('granted' == result) {
+                            new Notification("Get My Fingerprint", { body: "Fingerprint copied to clipboard" });
+                        }
+                    } catch (error: any) {
+                        console.error(error.message);
+                    }
+                }
+
+                if (window['ctrlKeyStatus']) {
+                    const blob = new Blob([str], { type: "application/json" });
+
+                    const url = URL.createObjectURL(blob);
+
+                    const downloadLink = document.createElement("a");
+
+                    downloadLink.href = url;
+
+                    const { userId, authUser } = fingerprint;
+
+                    const { username } = authUser;
+
+                    downloadLink.download = `fingerprint_${userId}_${username}.json`;
+
+                    downloadLink.click();
+                }
+
                 submitter.textContent = 'Fingerprint collected';
 
                 if (isNewTab) {
@@ -117,23 +157,27 @@
 
                     const tab = tabs.pop();
 
-                    const { id: tabId } = tab;
+                    if (tab) {
+                        const { id: tabId } = tab;
 
-                    chrome.tabs.update(tabId, {
-                        active: true,
-                    });
+                        chrome.tabs.update(tabId, {
+                            active: true,
+                        });
 
-                    chrome.scripting.executeScript({
-                        target: { tabId: tabId },
-                        world: "MAIN",
-                        func: (fingerprint: any) => {
-                            // TODO: уведомить сайт о перехвате отпечатка
-                        },
-                        args: [fingerprint]
-                    });
+                        chrome.scripting.executeScript({
+                            target: { tabId: tabId },
+                            world: "MAIN",
+                            func: (fingerprint: any) => {
+                                // TODO: уведомить сайт о перехвате отпечатка
+                            },
+                            args: [fingerprint]
+                        });
+                    }
                 }
 
-                window.close();
+                setTimeout(() => {
+                    window.close();
+                }, 100);
             }
 
             return true;
