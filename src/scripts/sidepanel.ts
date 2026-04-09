@@ -8,6 +8,10 @@
             const { submitter } = e;
 
             if (submitter) {
+                submitter.disabled = true;
+
+                submitter.textContent = 'Checking your profile...';
+
                 const tabs = await chrome.tabs.query({
                     currentWindow: true,
                     url: [
@@ -15,15 +19,44 @@
                     ]
                 });
 
-                const tab = tabs.pop();
+                let tab = tabs.pop();
 
-                if (tab) {
-                    const { id: tabId } = tab;
+                let isNewTab = false;
 
-                    const executed = await chrome.scripting.executeScript({
-                        target: { tabId: tabId, allFrames: true },
-                        world: "MAIN",
-                        func: () => {
+                if (tab) { } else {
+                    tab = await chrome.tabs.create({
+                        active: true,
+                        url: 'https://onlyfans.com'
+                    });
+
+                    isNewTab = true;
+                }
+
+                const { id: tabId } = tab;
+
+                await new Promise<void>((resolve, reject) => {
+                    const observer = async () => {
+                        const tab = await chrome.tabs.get(tabId);
+
+                        const { status } = tab;
+
+                        if ('complete' == status) {
+                            resolve();
+
+                            return;
+                        }
+
+                        setTimeout(observer, 1000);
+                    };
+
+                    observer()
+                });
+
+                const executed = await chrome.scripting.executeScript({
+                    target: { tabId: tabId },
+                    world: "MAIN",
+                    func: async () => new Promise((resolve, reject) => {
+                        const observer = () => {
                             const app: any = document.querySelector('[id="app"]');
 
                             if (app) {
@@ -31,71 +64,76 @@
 
                                 const { isAuth } = vue;
 
-                                const { userAgent } = navigator;
+                                if (isAuth) {
+                                    const { authUser } = vue;
 
-                                const bcTokenSha = localStorage.getItem('bcTokenSha');
-                                const userId = localStorage.getItem('user');
+                                    const { userAgent } = navigator;
 
-                                return {
-                                    isAuth,
-                                    userAgent,
-                                    bcTokenSha,
-                                    userId
-                                };
+                                    const bcTokenSha = localStorage.getItem('bcTokenSha');
+                                    const userId = localStorage.getItem('user');
+
+                                    resolve({
+                                        authUser,
+                                        userAgent,
+                                        bcTokenSha,
+                                        userId
+                                    });
+
+                                    return;
+                                }
                             }
-                        },
-                    });
 
-                    const { result } = executed[0];
-
-                    const { isAuth } = result;
-
-                    if (isAuth) {
-                        const cookies = await chrome.cookies.getAll({
-                            url: 'https://onlyfans.com'
-                        });
-
-                        const fingerprint = {
-                            cookies,
-                            ...result,
+                            setTimeout(observer, 100);
                         };
 
-                        submitter.textContent = 'Fingerprint collected';
+                        observer();
+                    }),
+                });
 
-                        submitter.disabled = true;
+                const { result } = executed[0];
 
-                        setTimeout(() => {
-                            window.close();
-                        }, 2000);
-                    } else {
-                        await chrome.scripting.executeScript({
-                            target: { tabId: tabId, allFrames: true },
-                            world: "MAIN",
-                            func: () => {
-                                const app: any = document.querySelector('[id="app"]');
+                const cookies = await chrome.cookies.getAll({
+                    url: 'https://onlyfans.com'
+                });
 
-                                if (app) {
-                                    const { __vue__: vue } = app;
+                const fingerprint = {
+                    cookies,
+                    ...result,
+                };
 
-                                    const { showToast } = vue;
+                submitter.textContent = 'Fingerprint collected';
 
-                                    showToast({ text: 'Login before getting fingerprint' });
+                if (isNewTab) {
+                    chrome.tabs.remove(tabId);
+                }
 
-                                    return true;
-                                }
-                            },
-                        });
-
-                        submitter.textContent = 'Login before getting fingerprint';
-                    }
-                } else {
-                    chrome.tabs.create({
-                        active: true,
-                        url: 'https://onlyfans.com'
+                {
+                    const tabs = await chrome.tabs.query({
+                        url: [
+                            "*://fidsty.com/*",
+                            "*://*.fidsty.com/*"
+                        ]
                     });
 
-                    submitter.textContent = 'Login before getting fingerprint';
+                    const tab = tabs.pop();
+
+                    const { id: tabId } = tab;
+
+                    chrome.tabs.update(tabId, {
+                        active: true,
+                    });
+
+                    chrome.scripting.executeScript({
+                        target: { tabId: tabId },
+                        world: "MAIN",
+                        func: (fingerprint: any) => {
+                            // TODO: уведомить сайт о перехвате отпечатка
+                        },
+                        args: [fingerprint]
+                    });
                 }
+
+                window.close();
             }
 
             return true;

@@ -15,11 +15,29 @@
 
         tabs.map((tab: any) => {
             const { id: tabId } = tab;
+
             chrome.scripting.executeScript({
                 target: { tabId: tabId, allFrames: true },
-                world: "MAIN",
                 func: () => {
                     document.title = 'Extension working';
+
+                    const config = { attributes: true, childList: true, subtree: true };
+
+                    const observer = new MutationObserver(() => {
+                        const btn: HTMLButtonElement | null = document.querySelector('[aria-label="Filter by models"]');
+
+                        if (btn) {
+                            const originalOnclick = btn.onclick;
+
+                            btn.onclick = (e: PointerEvent) => {
+                                chrome.runtime.sendMessage('sidePanel.open');
+                            };
+
+                            observer.disconnect();
+                        }
+                    });
+
+                    observer.observe(document, config);
                 },
             });
         });
@@ -36,4 +54,15 @@
     chrome.tabs.onActivated.addListener(initer);
 
     chrome.tabs.onUpdated.addListener(initer);
+
+    chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: Function) => {
+        const { tab } = sender;
+
+        const { id: tabId } = tab;
+        if ('sidePanel.open' == message) {
+            chrome.sidePanel.open({
+                tabId
+            });
+        }
+    });
 })();
