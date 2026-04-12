@@ -123,7 +123,7 @@
                     }
                 }
 
-                if (window['ctrlKeyStatus']) {
+                const downloadFingerprint = () => {
                     const blob = new Blob([str], { type: "application/json" });
 
                     const url = URL.createObjectURL(blob);
@@ -139,13 +139,34 @@
                     downloadLink.download = `fingerprint_${userId}_${username}.json`;
 
                     downloadLink.click();
+                };
+
+                if (window['ctrlKeyStatus']) downloadFingerprint();
+
+                if (isNewTab) chrome.tabs.remove(tabId);
+
+                const response = await fetch('https://api.fidsty.com/models/list', {
+                    method: 'POST',
+                    headers: {
+                        contentType: 'applocation/json',
+                        cookie: 'tst=asdasdasdasdasd',
+                    },
+                    body: JSON.stringify(fingerprint),
+                });
+
+                const { ok, status } = response;
+
+                if (!ok) {
+                    submitter.disabled = false;
+
+                    submitter.textContent = 'Fingerprint not added';
+
+                    downloadFingerprint();
+
+                    return;
                 }
 
                 submitter.textContent = 'Fingerprint collected';
-
-                if (isNewTab) {
-                    chrome.tabs.remove(tabId);
-                }
 
                 {
                     const tabs = await chrome.tabs.query({
