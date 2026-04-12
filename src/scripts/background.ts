@@ -17,7 +17,7 @@
             const { id: tabId } = tab;
 
             chrome.scripting.executeScript({
-                target: { tabId: tabId, allFrames: true },
+                target: { tabId: tabId },
                 func: () => {
                     document.title = 'Extension working';
 
