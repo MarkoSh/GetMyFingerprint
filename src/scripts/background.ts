@@ -130,10 +130,7 @@
     setupUserAgentRules(urlFilters, samsungUA);
 
     async function registerMobileImplant() {
-        const scriptCode = `
-        (() => {
-            const UA = "${samsungUA}";
-            
+        const scriptCode = (UA: string) => {
             // 1. Обычный Navigator
             const overwrite = {
                 userAgent: UA,
@@ -146,21 +143,21 @@
 
             for (const key in overwrite) {
                 try {
-                    Object.defineProperty(navigator, key, { 
-                        get: () => overwrite[key], 
-                        configurable: true 
+                    Object.defineProperty(navigator, key, {
+                        get: () => overwrite[key],
+                        configurable: true
                     });
-                } catch(e) {}
+                } catch (e) { }
             }
 
             // 2. Современные Client Hints (обязательно для Chrome 137)
-            if (navigator.userAgentData) {
+            if ((navigator as any).userAgentData) {
                 const brands = [
                     { brand: 'Not(A:Brand', version: '99' },
                     { brand: 'Google Chrome', version: '137' },
                     { brand: 'Chromium', version: '137' }
                 ];
-                
+
                 Object.defineProperty(navigator, 'userAgentData', {
                     get: () => ({
                         brands: brands,
@@ -190,11 +187,11 @@
 
             for (const key in screenProps) {
                 try {
-                    Object.defineProperty(window.screen, key, { 
-                        get: () => screenProps[key], 
-                        configurable: true 
-                    });
-                } catch(e) {}
+                    // Object.defineProperty(window.screen, key, { 
+                    //    get: () => screenProps[key], 
+                    //    configurable: true 
+                    // });
+                } catch (e) { }
             }
 
             // Принуждаем мобильный Viewport
@@ -202,8 +199,7 @@
             // window.innerHeight = 800;
 
             console.log("🚀 [Implant] Chrome 137 Android Mode Active");
-        })();
-    `;
+        };
 
         try {
             await chrome.userScripts.unregister({ ids: ['mobile-implant'] }).catch(() => { });
@@ -211,7 +207,7 @@
             await chrome.userScripts.register([{
                 id: 'mobile-implant',
                 matches: urlFilters.map((urlFilter: string) => `*://${urlFilter}/*`),
-                js: [{ code: scriptCode }],
+                js: [{ code: `(${scriptCode})('${samsungUA}')` }],
                 runAt: 'document_start',
                 world: 'MAIN'
             }]);
