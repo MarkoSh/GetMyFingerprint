@@ -121,10 +121,10 @@
     const samsungUA = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36';
 
     const urlFilters = [
-        'fidsty.com',
-        '*.fidsty.com',
-        // 'onlyfans.com',
-        // '*.onlyfans.com',
+        // 'fidsty.com',
+        // '*.fidsty.com',
+        'onlyfans.com',
+        '*.onlyfans.com',
     ];
 
     setupUserAgentRules(urlFilters, samsungUA);
@@ -198,8 +198,8 @@
             }
 
             // Принуждаем мобильный Viewport
-            window.innerWidth = 360;
-            window.innerHeight = 800;
+            // window.innerWidth = 360;
+            // window.innerHeight = 800;
 
             console.log("🚀 [Implant] Chrome 137 Android Mode Active");
         })();
