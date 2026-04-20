@@ -23,7 +23,10 @@
 		"management",
 		"scripting",
 		"sidePanel",
-		"tabs"
+		"tabs",
+		"declarativeNetRequest",
+		"declarativeNetRequestFeedback",
+		"userScripts"
 	],
 	"side_panel": {
 		"default_path": "html/sidepanel.html"
