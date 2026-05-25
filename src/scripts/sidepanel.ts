@@ -107,14 +107,6 @@
                     ...result,
                 };
 
-                const defaultUserAgent = `Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36`;
-
-                if (defaultUserAgent != fingerprint.userAgent) {
-                    alert(`Incorrect user agent, check your extensions`);
-
-                    return;
-                }
-
                 const str = JSON.stringify(fingerprint);
 
                 if (window['shiftKeyStatus']) {

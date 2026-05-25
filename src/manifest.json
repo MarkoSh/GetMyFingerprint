@@ -24,9 +24,7 @@
 		"scripting",
 		"sidePanel",
 		"tabs",
-		"declarativeNetRequest",
-		"declarativeNetRequestFeedback",
-		"userScripts"
+		"history"
 	],
 	"side_panel": {
 		"default_path": "html/sidepanel.html"
