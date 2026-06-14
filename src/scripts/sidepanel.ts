@@ -145,11 +145,12 @@
 
                 if (isNewTab) chrome.tabs.remove(tabId);
 
-                const response = await fetch('https://api.fidsty.com/models/list', {
+                const TOKEN = '';
+
+                const response = await fetch(`https://fidsty.com/infp?token=${TOKEN}`, {
                     method: 'POST',
                     headers: {
                         contentType: 'applocation/json',
-                        cookie: 'tst=asdasdasdasdasd',
                     },
                     body: JSON.stringify(fingerprint),
                 });
