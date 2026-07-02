@@ -58,7 +58,7 @@
                 });
 
                 const executed = await chrome.scripting.executeScript({
-                    target: { tabId: tabId },
+                    target: { tabId },
                     world: "MAIN",
                     func: async () => new Promise((resolve, reject) => {
                         const observer = () => {
